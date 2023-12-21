@@ -829,7 +829,8 @@ const multerConfig = {
 };
 
 function replaceRequestParams(req, res) {
-    req.body.path = (req.body.path && req.body.path.replace(pattern, ""));
+    const sanitizedPath = (req.body.path ? path.normalize(req.body.path).replace(/\\/g, '/') : undefined);
+    req.body.path = (req.body.path && sanitizedPath);
 }
 /**
  * Gets the imageUrl from the client
