@@ -1260,7 +1260,8 @@ app.post('/', function (req, res) {
         }
         var promiseList = [];
         for (var i = 0; i < file.length; i++) {
-            promiseList.push(stats(path.join(contentRootPath + req.body.path.replace(pattern, ""), file[i])));
+            const sanitizedPath = path.normalize(req.body.path).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
+            promiseList.push(stats(path.join(contentRootPath + sanitizedPath, file[i])));
         }
         return Promise.all(promiseList);
     }
