@@ -437,7 +437,6 @@ function copyFolder(source, dest) {
     files = fs.readdirSync(source);
     files.forEach(function (file) {
         var curSource = path.join(source, file);
-        curSource=curSource.replace("../","");
         if (fs.lstatSync(curSource).isDirectory()) {
             copyFolder(curSource, path.join(dest, file)); source
         } else {
@@ -567,7 +566,6 @@ function MoveFolder(source, dest) {
     files = fs.readdirSync(source);
     files.forEach(function (file) {
         var curSource = path.join(source, file);
-        curSource=curSource.replace("../","");
         if (fs.lstatSync(curSource).isDirectory()) {
             MoveFolder(curSource, path.join(dest, file));
             fs.rmdirSync(curSource);
