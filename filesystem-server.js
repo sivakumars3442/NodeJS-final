@@ -2,6 +2,12 @@
 var express = require('express');
 var yargs = require('yargs');
 var app = express();
+const rateLimit = require("express-rate-limit");
+// Enable rate limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
+  });
 var size = 0;
 var copyName = "";
 var location = "";
@@ -21,6 +27,7 @@ contentRootPath=contentRootPath.replace("../","");
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.use(limiter);
 app.use(bodyParser.json());
 app.use(cors());
 
