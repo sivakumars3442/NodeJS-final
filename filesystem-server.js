@@ -963,7 +963,9 @@ app.post('/Upload', multer(multerConfig).any('uploadFiles'), function (req, res)
             }
         } else if(req.body.action === 'remove') {
             if (fs.existsSync(path.join(contentRootPath, req.body.path + req.body["cancel-uploading"]))) {
-                fs.unlinkSync(path.join(contentRootPath, path.normalize(req.body.path).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/') + req.body["cancel-uploading"]));
+                const normalizedPath = path.normalize(req.body.path).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
+                const cancelUploadValue = path.normalize(req.body['cancel-upload']).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
+                fs.unlinkSync(path.join(contentRootPath, normalizedPath + cancelUploadValue));
             }
         }        
         if(errorValue != null) {
