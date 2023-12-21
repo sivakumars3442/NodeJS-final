@@ -1199,7 +1199,8 @@ app.post('/', function (req, res) {
             res.json(response);
         }
         var fileList = [];
-        fromDir(path.normalize(contentRootPath + req.body.path).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/'), req.body.searchString.replace(/\*/g, ""), contentRootPath, req.body.caseSensitive, req.body.searchString);
+        const sanitizedPath = path.resolve(contentRootPath + req.body.path).replace(/\\/g, '/') + '/';
+        fromDir(sanitizedPath, req.body.searchString.replace(/\*/g, ""), contentRootPath, req.body.caseSensitive, req.body.searchString);
         (async () => {
             const tes = await FileManagerDirectoryContent(req, res, contentRootPath + req.body.path);
             if (tes.permission != null && !tes.permission.read) {
