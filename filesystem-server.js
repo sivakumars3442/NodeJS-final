@@ -22,7 +22,6 @@ var cors = require('cors');
 const pattern = /(\.\.\/)/g;
 
 var contentRootPath = yargs.argv.d;
-contentRootPath=contentRootPath.replace("../","");
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -171,7 +170,6 @@ function deleteFolder(req, res, contentRootPath) {
         if (fs.existsSync(path)) {
             fs.readdirSync(path).forEach(function (file, index) {
                 var curPath = path + "/" + file;
-                curPath=curPath.replace("../","");
                 if (fs.lstatSync(curPath).isDirectory()) { // recurse
                     deleteFolderRecursive(curPath);
                 } else { // delete file
@@ -1199,7 +1197,7 @@ app.post('/', function (req, res) {
             res.json(response);
         }
         var fileList = [];
-        fromDir(contentRootPath + req.body.path, req.body.searchString.replace(/\*/g, ""), contentRootPath, req.body.caseSensitive, req.body.searchString);
+        fromDir(path.normalize(contentRootPath + req.body.path).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/'), req.body.searchString.replace(/\*/g, ""), contentRootPath, req.body.caseSensitive, req.body.searchString);
         (async () => {
             const tes = await FileManagerDirectoryContent(req, res, contentRootPath + req.body.path);
             if (tes.permission != null && !tes.permission.read) {
