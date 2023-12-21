@@ -899,7 +899,7 @@ app.post('/Upload', multer(multerConfig).any('uploadFiles'), function (req, res)
         var errorValue = new Error();
         if(req.body.action === 'save'){
             var folders = (req.body.filename).split('/');
-            var filepath = req.body.path;
+            var filepath = path.normalize(req.body.path).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, "/");
             var uploadedFileName = folders[folders.length - 1];
             // checking the folder upload
             if (folders.length > 1)
