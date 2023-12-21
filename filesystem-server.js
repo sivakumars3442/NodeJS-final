@@ -1199,7 +1199,7 @@ app.post('/', function (req, res) {
             res.json(response);
         }
         var fileList = [];
-        const sanitizedPath = path.resolve(contentRootPath + req.body.path).replace(/\\/g, '/') + '/';
+        const sanitizedPath = path.resolve(contentRootPath + path.normalize(req.body.path)).replace(/\\/g, '/') + '/';
         fromDir(sanitizedPath, req.body.searchString.replace(/\*/g, ""), contentRootPath, req.body.caseSensitive, req.body.searchString);
         (async () => {
             const tes = await FileManagerDirectoryContent(req, res, contentRootPath + req.body.path);
