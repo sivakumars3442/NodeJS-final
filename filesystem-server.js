@@ -221,7 +221,9 @@ function deleteFolder(req, res, contentRootPath) {
                 if (fs.lstatSync(path.join(contentRootPath + files.filterPath, files.name)).isFile()) {
                     fs.unlinkSync(path.join(contentRootPath + files.filterPath, files.name));
                 } else {
-                    deleteFolderRecursive(path.join(contentRootPath + files.filterPath, files.name));
+                    const deleteFolderPath = path.join(contentRootPath + files.filterPath, files.name);
+                    const sanitizedPath = path.normalize(deleteFolderPath).replace(/^(\.\.[\/\\])+/, '');
+                    deleteFolderRecursive(path.join(sanitizedPath));
                 }
             });
             response = { files: data };
@@ -777,7 +779,7 @@ function FileManagerDirectoryContent(req, res, filepath, searchFilterPath) {
             if (searchFilterPath) {
                 cwd.filterPath = searchFilterPath;
             } else {
-                cwd.filterPath = req.body.data.length > 0 ? req.body.path : "";
+                cwd.filterPath = req.body.data.length > 0 ? path.normalize(req.body.path).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/') : "";
             }
             cwd.permission = getPathPermission(req.path, cwd.isFile, (req.body.path == "/") ? "" : cwd.name, filepath, contentRootPath, cwd.filterPath);
             if (fs.lstatSync(filepath).isFile()) {
