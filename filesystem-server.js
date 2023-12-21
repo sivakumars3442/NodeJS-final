@@ -836,7 +836,8 @@ function replaceRequestParams(req, res) {
  */
 app.get('/GetImage', function (req, res) {
     replaceRequestParams(req, res);
-    var image = req.query.path.split("/").length > 1 ? req.query.path : "/" + req.query.path;
+    const sanitizedPath = path.normalize(req.query.path).replace(/\\/g, '/');
+    var image = sanitizedPath.split("/").length > 1 ? sanitizedPath : "/" + sanitizedPath;
     const resolvedPath = path.resolve(contentRootPath + image.substr(0, image.lastIndexOf("/")), image.substr(image.lastIndexOf("/") + 1, image.length - 1));
     const fullPath = (contentRootPath + image).replace(/[\\/]/g, "\\");
     const isValidatePath = fullPath == resolvedPath ? true : false;
