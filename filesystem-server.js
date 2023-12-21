@@ -74,7 +74,8 @@ class AccessRules {
  */
 function GetFiles(req, res) {
     return new Promise((resolve, reject) => {
-        fs.readdir(contentRootPath + req.body.path.replace(pattern, ""), function (err, files) {
+        const sanitizedPath = path.normalize(req.body.path).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
+        fs.readdir(contentRootPath + sanitizedPath, function (err, files) {
             //handling error
             if (err) {
                 console.log(err);
