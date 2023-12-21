@@ -620,7 +620,7 @@ function MoveFiles(req, res, contentRootPath) {
     });
     if (!permissionDenied) {
         req.body.data.forEach(function (item) {
-            var fromPath = contentRootPath + item.filterPath + item.name;
+            var fromPath = path.normalize(contentRootPath + item.filterPath + item.name).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
             var toPath = contentRootPath + req.body.targetPath + item.name;
             checkForFileUpdate(fromPath, toPath, item, contentRootPath, req);
             if (!isRenameChecking) {
@@ -641,7 +641,7 @@ function MoveFiles(req, res, contentRootPath) {
                 }
                 var list = item;
                 list.name = copyName;
-                list.filterPath = req.body.targetPath;
+                list.filterPath = path.normalize(req.body.targetPath).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
                 fileList.push(list);
             } else {
                 replaceFileList.push(item.name);
