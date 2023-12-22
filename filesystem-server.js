@@ -1087,7 +1087,8 @@ app.post('/', function (req, res) {
 
     // Action for getDetails
     if (req.body.action == "details") {
-        getFileDetails(req, res, contentRootPath + req.body.path, req.body.data[0].filterPath);
+        var sanitizedPath = path.normalize(req.body.path).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
+        getFileDetails(req, res, contentRootPath + sanitizedPath, req.body.data[0].filterPath);
     }
     // Action for copying files
     if (req.body.action == "copy") {
