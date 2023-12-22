@@ -354,20 +354,6 @@ function checkForMultipleLocations(req, contentRootPath) {
     return isMultipleLocation;
 }
 function getFileDetails(req, res, contentRootPath, filterPath) {
-    req.body.data.forEach(function (item) {
-        const resolvedPath = path.resolve(contentRootPath + item.filterPath, item.name);
-        const fullPath = (contentRootPath.replace(/\/+$/, '') + item.filterPath + item.name ).replace(/[\\/]/g, "\\");
-        const isValidatePath = fullPath == resolvedPath ? true : false;
-        if(!isValidatePath){
-            var errorMsg = new Error();
-            errorMsg.message = "Access denied for Directory-traversal";
-            errorMsg.code = "401";
-            response = { error: errorMsg };
-            response = JSON.stringify(response);
-            res.setHeader('Content-Type', 'application/json');
-            res.json(response);
-        }
-    });
     var isNamesAvailable = req.body.names.length > 0 ? true : false;
     if (req.body.names.length == 0 && req.body.data != 0) {
         var nameValues = [];
