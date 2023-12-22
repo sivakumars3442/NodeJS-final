@@ -1207,7 +1207,7 @@ app.post('/', function (req, res) {
         const sanitizedPath = path.resolve(contentRootPath + path.normalize(req.body.path).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/')).replace(/\\/g, '/') + '/';
         fromDir(sanitizedPath, req.body.searchString.replace(/\*/g, ""), contentRootPath, req.body.caseSensitive, req.body.searchString);
         (async () => {
-            const tes = await FileManagerDirectoryContent(req, res, contentRootPath + req.body.path);
+            const tes = await FileManagerDirectoryContent(req, res, contentRootPath + path.normalize(req.body.path).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/'));
             if (tes.permission != null && !tes.permission.read) {
                 var errorMsg = new Error();
                 errorMsg.message = (permission.message !== "") ? permission.message :
