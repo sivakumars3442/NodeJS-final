@@ -141,7 +141,7 @@ function renameFolder(req, res) {
         var sanitizedPath = path.normalize(req.body.data[0].filterPath).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
         var oldDirectoryPath = path.join(contentRootPath + sanitizedPath, oldName);
         var newDirectoryPath = path.join(contentRootPath + sanitizedPath, newName);
-        if (checkForDuplicates(contentRootPath + req.body.data[0].filterPath, newName, req.body.data[0].isFile)) {
+        if (checkForDuplicates(contentRootPath + sanitizedPath, newName, req.body.data[0].isFile)) {
             var errorMsg = new Error();
             errorMsg.message = "A file or folder with the name " + req.body.name + " already exists.";
             errorMsg.code = "400";
