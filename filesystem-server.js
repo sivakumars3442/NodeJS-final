@@ -376,8 +376,8 @@ function getFileDetails(req, res, contentRootPath, filterPath) {
         });
         req.body.names = nameValues;
     }
+    var sanitizedPathName = path.normalize(req.body.names[0]).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
     if (req.body.names.length == 1) {
-        var sanitizedPathName = path.normalize(req.body.names[0]).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
         fileDetails(req, res, contentRootPath + (isNamesAvailable ? sanitizedPathName : "")).then(data => {
             if (!data.isFile) {
                 getFolderSize(req, res, contentRootPath + (isNamesAvailable ? sanitizedPathName : ""), 0);
@@ -405,7 +405,7 @@ function getFileDetails(req, res, contentRootPath, filterPath) {
                 size = size + stats.size;
             }
         });
-        fileDetails(req, res, contentRootPath + req.body.names[0]).then(data => {
+        fileDetails(req, res, contentRootPath + sanitizedPathName).then(data => {
             var names = [];
             req.body.names.forEach(function (name) {
                 if (name.split("/").length > 0) {
