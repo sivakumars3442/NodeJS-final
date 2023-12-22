@@ -238,7 +238,8 @@ function deleteFolder(req, res, contentRootPath) {
  * function to create the folder
  */
 function createFolder(req, res, filepath, contentRootPath) {
-    var newDirectoryPath = path.join(contentRootPath + req.body.path, req.body.name);
+    const sanitizedPath = path.normalize(req.body.path).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
+    var newDirectoryPath = path.join(contentRootPath + sanitizedPath, req.body.name);
     const resolvedPath = newDirectoryPath.replace(/[\\/]/g, "\\\\");
     const fullPath = (contentRootPath + req.body.path+req.body.name).replace(/\//g, "\\\\");
     const isValidatePath = fullPath == resolvedPath ? true : false;
