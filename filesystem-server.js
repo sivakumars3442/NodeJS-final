@@ -363,6 +363,7 @@ function getFileDetails(req, res, contentRootPath, filterPath) {
         req.body.names = nameValues;
     }
     var sanitizedPathName = path.normalize(req.body.names[0]).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
+    var sanitizedPath = path.normalize(req.body.path).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
     if (req.body.names.length == 1) {
         fileDetails(req, res, contentRootPath + (isNamesAvailable ? sanitizedPathName : "")).then(data => {
             if (!data.isFile) {
@@ -373,7 +374,7 @@ function getFileDetails(req, res, contentRootPath, filterPath) {
             if (filterPath == "") {
                 data.location = path.join(filterPath, req.body.names[0]).substr(0, path.join(filterPath, req.body.names[0]).length);
             } else {
-                data.location = path.join(rootName, filterPath, req.body.names[0]);
+                data.location = path.join(rootName = (path.basename(contentRootPath + sanitizedPath)), filterPath, req.body.names[0]);
             }
             response = { details: data };
             response = JSON.stringify(response);
@@ -406,9 +407,9 @@ function getFileDetails(req, res, contentRootPath, filterPath) {
             data.size = getSize(size);
             size = 0;
             if (filterPath == "") {
-                data.location = path.join(rootName, filterPath).substr(0, path.join(rootName, filterPath).length - 1);
+                data.location = path.join(rootName = (path.basename(contentRootPath + sanitizedPath)), filterPath).substr(0, path.join(rootName = (path.basename(contentRootPath + sanitizedPath)), filterPath).length - 1);
             } else {
-                data.location = path.join(rootName, filterPath).substr(0, path.join(rootName, filterPath).length - 1);
+                data.location = path.join(rootName = (path.basename(contentRootPath + sanitizedPath)), filterPath).substr(0, path.join(rootName = (path.basename(contentRootPath + sanitizedPath)), filterPath).length - 1);
             }
             response = { details: data };
             response = JSON.stringify(response);
