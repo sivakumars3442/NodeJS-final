@@ -1279,8 +1279,9 @@ app.post('/', function (req, res) {
             const fullPath = (contentRootPath + req.body.path).replace(/\//g, "\\\\");
             const isValidatePath = fullPath == resolvedPath ? true : false;
             const filesList = await GetFiles(req, res);
-            const cwdFiles = await FileManagerDirectoryContent(req, res, contentRootPath + req.body.path);
-            cwdFiles.name = req.body.path == "/" ? rootName = (path.basename(contentRootPath + req.body.path)) : path.basename(contentRootPath + req.body.path)
+            const sanitizedPath = path.normalize(req.body.path).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
+            const cwdFiles = await FileManagerDirectoryContent(req, res, contentRootPath + sanitizedPath);
+            cwdFiles.name = req.body.path == "/" ? rootName = (path.basename(contentRootPath + sanitizedPath)) : path.basename(contentRootPath + sanitizedPath)
             var response = {};
             if(!isValidatePath)
             {
