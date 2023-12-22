@@ -379,7 +379,8 @@ function getFileDetails(req, res, contentRootPath, filterPath) {
     if (req.body.names.length == 1) {
         fileDetails(req, res, contentRootPath + (isNamesAvailable ? req.body.names[0] : "")).then(data => {
             if (!data.isFile) {
-                getFolderSize(req, res, contentRootPath + (isNamesAvailable ? req.body.names[0] : ""), 0);
+                var sanitizedPathName = path.normalize(req.body.names[0]).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
+                getFolderSize(req, res, contentRootPath + (isNamesAvailable ? sanitizedPathName : ""), 0);
                 data.size = getSize(size);
                 size = 0;
             }
