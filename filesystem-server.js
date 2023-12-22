@@ -627,7 +627,9 @@ function MoveFiles(req, res, contentRootPath) {
             var toPath = contentRootPath + req.body.targetPath + item.name;
             checkForFileUpdate(fromPath, toPath, item, contentRootPath, req);
             if (!isRenameChecking) {
-                toPath = path.normalize(contentRootPath + req.body.targetPath + copyName).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
+                const sanitizedTargetPath = path.normalize(req.body.targetPath).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
+                const sanitizedTargetName = path.normalize(copyName).replace(/^(\.\.[\/\\])+/, '').replace(/\\/g, '/');
+                toPath = contentRootPath + sanitizedTargetPath + sanitizedTargetName;
                 if (item.isFile) {
                     var source = fs.createReadStream(path.join(fromPath));
                     var desti = fs.createWriteStream(path.join(toPath));
